@@ -2,6 +2,7 @@
 import tensorflow as tf
 from tensorflow.keras import models,layers
 from tensorflow.keras.applications import InceptionResNetV2,inception_resnet_v2
+from keras.optimizers import SGD
 import numpy as np
 
 #Input layer takes the image:
@@ -31,3 +32,5 @@ outputbrakingLyr = layers.Dense(1,activation='linear')(dense3Lyr)
 outputsteeringLyr = layers.Dense(1,activation='linear')(dense6Lyr)
 
 model = models.Model(inputLyr,[outputbrakingLyr,outputsteeringLyr])
+opt = SGD(learning_rate=0.01,momentum=0.9)
+model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
