@@ -15,23 +15,27 @@ def keys_to_output(keys):
     
     if 'W' in keys:
         output[0] = 1
-    elif 'A' in keys:
+    if 'A' in keys:
         output[1] = 1
-    elif 'S' in keys:
+    if 'S' in keys:
         output[2] = 1
-    else:
+    if 'D' in keys:
         output[3] = 1
+    
     return output
 
 
-file_name = 'training_data.npy'
-
+file_name = 'training_data.npz'
+imgData,keyData = np.ndarray(shape=(1,480,270)),np.ndarray(shape=(1,4))
 if os.path.isfile(file_name):
     print('File exists, loading previous data!')
-    training_data = list(np.load(file_name))
+    npzFile = np.load(file_name,allow_pickle=True)
+    print(npzFile)
+    imgData = npzFile["arr_0"]
+    keyData = npzFile["arr_1"]
 else:
     print('File does not exist, starting fresh!')
-    training_data = []
+
 
 
 def main():
@@ -40,7 +44,6 @@ def main():
         print("Begin in",i+1)
         time.sleep(1)
 
-
     paused = False
     while(True):
 
@@ -48,19 +51,22 @@ def main():
             # 800x600 windowed mode
             screen = grab_screen(region=(0,40,800,640))
             last_time = time.time()
-            screen = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)
-            screen = cv2.resize(screen, (270,480))
+            screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)
+            screen = cv2.resize(screen, (480,270))
             print(screen)
             
             # resize to something a bit more acceptable for a CNN
             keys = key_check()
             output = keys_to_output(keys)
             print(output)
-            training_data.append([screen,output])
-            
-            if len(training_data) % 1000 == 0:
-                print(len(training_data))
-                np.save(file_name,training_data)
+
+            np.append(imgData,screen)
+            np.append(keyData,output)
+            print(imgData.size)
+            if imgData.size % 1000 == 0:
+                print(len(imgData))
+                print(imgData.size)
+                np.savez(file_name,imgData,keyData)
 
         keys = key_check()
         if 'T' in keys:
