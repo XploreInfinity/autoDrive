@@ -30,15 +30,16 @@ from getkeys import key_check
 import os
 import pickle
 
-w = [1,0,0,0,0,0,0,0,0]
-s = [0,1,0,0,0,0,0,0,0]
-a = [0,0,1,0,0,0,0,0,0]
-d = [0,0,0,1,0,0,0,0,0]
-wa = [0,0,0,0,1,0,0,0,0]
-wd = [0,0,0,0,0,1,0,0,0]
-sa = [0,0,0,0,0,0,1,0,0]
-sd = [0,0,0,0,0,0,0,1,0]
-nk = [0,0,0,0,0,0,0,0,1]
+w = [1,0,0,0,0,0,0,0,0,0]
+s = [0,1,0,0,0,0,0,0,0,0]
+a = [0,0,1,0,0,0,0,0,0,0]
+d = [0,0,0,1,0,0,0,0,0,0]
+wa = [0,0,0,0,1,0,0,0,0,0]
+wd = [0,0,0,0,0,1,0,0,0,0]
+sa = [0,0,0,0,0,0,1,0,0,0]
+sd = [0,0,0,0,0,0,0,1,0,0]
+nk = [0,0,0,0,0,0,0,0,1,0]
+hbrk = [0,0,0,0,0,0,0,0,0,1]
 
 starting_value = 1
 
@@ -57,8 +58,8 @@ while True:
 def keys_to_output(keys):
     '''
     Convert keys to a ...multi-hot... array
-     0  1  2  3  4   5   6   7    8
-    [W, S, A, D, WA, WD, SA, SD, NOKEY] boolean values.
+     0  1  2  3  4   5   6   7    8     9
+    [W, S, A, D, WA, WD, SA, SD, NOKEY,HANDBRAKE] boolean values.
     '''
     output = [0,0,0,0,0,0,0,0,0]
 
@@ -78,6 +79,8 @@ def keys_to_output(keys):
         output = a
     elif 'D' in keys:
         output = d
+    elif ' ' in keys:
+        output = hbrk
     else:
         output = nk
     return output
